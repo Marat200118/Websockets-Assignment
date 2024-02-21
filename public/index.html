@@ -13,12 +13,14 @@
 <body>
   <a id="url" href=""></a>
   <div id="qr"></div>
+  <canvas id="gameCanvas" width="400" height="400"></canvas>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha512-ZDSPMa/JM1D+7kdg2x3BsruQ6T/JpJo3jWDWkCZsP+5yVyp1KfESqLI+7RqB5k24F7p2cV7i2YHh/890y6P6Sw==" crossorigin="anonymous"></script>
   <script>
     {
       const $messages = document.getElementById('messages');
       const $url = document.getElementById('url');
+      let gameHasStarted = false;
 
       let socket;
       const init = () => {
@@ -38,19 +40,105 @@
         });
 
         socket.on(`update`, data => {
-          let $cursor = document.querySelector(`#cursor`);
-          if (!$cursor) {
-            $cursor = document.createElement(`div`);
-            $cursor.classList.add(`cursor`);
-            $cursor.setAttribute(`id`, `cursor`);
-            document.body.appendChild($cursor);
+          const command = data.command;
+          if (command === "start") {
+            // Start the game only if it hasn't started already
+            if (!gameHasStarted) {
+              main();
+              gameHasStarted = true; // Ensure the game can't be restarted while running
+            }
+          } else {
+            changeDirection(command); // Existing direction change logic
           }
-          $cursor.style.left = `${data.x * window.innerWidth}px`;
-          $cursor.style.top = `${data.y * window.innerHeight}px`;
         });
       };
 
       init();
+
+
+
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+
+      let snake = [{ x: 150, y: 150 }, { x: 140, y: 150 }, { x: 130, y: 150 }, { x: 120, y: 150 }, { x: 110, y: 150 }];
+      let dx = 10;
+      let dy = 0;
+      let changingDirection = false;
+
+      // Start game
+
+      // Main function called repeatedly to keep the game running
+      const main = () => {
+        if (hasGameEnded()) return;
+
+        changingDirection = false;
+        setTimeout(function onTick() {
+          clearCanvas();
+          drawSnake();
+          moveSnake();
+          main();
+        }, 70);
+      }
+
+      // Draw a border around the canvas
+      const clearCanvas = () => {
+        ctx.fillStyle = 'black';
+        ctx.strokestyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeRect(0, 0, canvas.width, canvas.height);
+      }
+
+      // Draw the snake on the canvas
+      const drawSnake = () => {
+        snake.forEach(part => {
+          ctx.fillStyle = 'lightgreen';
+          ctx.strokestyle = 'darkgreen';
+          ctx.fillRect(part.x, part.y, 10, 10);
+          ctx.strokeRect(part.x, part.y, 10, 10);
+        });
+      }
+
+      // Move the snake
+      const moveSnake = () => {
+        const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+        snake.unshift(head);
+        snake.pop();
+      }
+
+      // Change snake direction
+      const changeDirection = (command) => {
+        if (changingDirection) return;
+        changingDirection = true;
+
+        if (command === 'up' && dy === 0) {
+          dx = 0;
+          dy = -10;
+        } else if (command === 'down' && dy === 0) {
+          dx = 0;
+          dy = 10;
+        } else if (command === 'left' && dx === 0) {
+          dx = -10;
+          dy = 0;
+        } else if (command === 'right' && dx === 0) {
+          dx = 10;
+          dy = 0;
+        }
+      }
+
+      // Check collision with self
+      const hasGameEnded = () => {
+        for (let i = 4; i < snake.length; i++) {
+          const collided = snake[i].x === snake[0].x && snake[i].y === snake[0].y;
+          if (collided) return true;
+        }
+        const hitLeftWall = snake[0].x < 0;
+        const hitRightWall = snake[0].x > canvas.width - 10;
+        const hitToptWall = snake[0].y < 0;
+        const hitBottomWall = snake[0].y > canvas.height - 10;
+
+        return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall;
+      }
+      // main();
     }
   </script>
 </body>
