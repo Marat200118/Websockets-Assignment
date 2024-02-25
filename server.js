@@ -23,6 +23,11 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     delete clients[socket.id];
   });
+
+  socket.on("scoreUpdate", (data) => {
+    console.log("Score Update", data);
+    io.emit("scoreUpdate", data);
+  });
 });
 
 app.use(express.static("public"));

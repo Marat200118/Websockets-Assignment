@@ -1,46 +1,57 @@
-// const $messages = document.getElementById("messages");
+let socket;
+let targetSocketId;
 
-// let socket;
+const init = () => {
+  targetSocketId = getUrlParameter("id");
+  if (!targetSocketId) {
+    alert(`Missing target ID in querystring`);
+    return;
+  }
+  socket = io.connect("/");
+  socket.on("connect", () => {
+    console.log(`Connected: ${socket.id}`);
+    attachButtonListeners();
+  });
 
-// const init = () => {
-//   targetSocketId = getUrlParameter("id");
-//   if (!targetSocketId) {
-//     alert(`Missing target ID in querystring`);
-//     return;
-//   }
-//   socket = io.connect("/");
-//   socket.on("connect", () => {
-//     console.log(`Connected: ${socket.id}`);
-//   });
-//   window.addEventListener(`mousemove`, (e) => handleMouseMove(e));
-//   window.addEventListener(`touchmove`, (e) => handleTouchMove(e));
-// };
+  socket.on("scoreUpdate", (data) => {
+    // Correctly access the score from the data object
+    document.querySelector(
+      ".scoreDisplay"
+    ).textContent = `Score: ${data.score}`;
+  });
+};
 
-// const getUrlParameter = (name) => {
-//   name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-//   const regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-//   const results = regex.exec(location.search);
-//   return results === null
-//     ? false
-//     : decodeURIComponent(results[1].replace(/\+/g, " "));
-// };
+const getUrlParameter = (name) => {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  const regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+  const results = regex.exec(location.search);
+  return results === null
+    ? false
+    : decodeURIComponent(results[1].replace(/\+/g, " "));
+};
 
-// const handleMouseMove = (e) => {
-//   if (socket.connected) {
-//     socket.emit(`update`, targetSocketId, {
-//       x: e.clientX / window.innerWidth,
-//       y: e.clientY / window.innerHeight,
-//     });
-//   }
-// };
+const attachButtonListeners = () => {
+  document
+    .getElementById("start")
+    .addEventListener("click", () => sendCommand("start"));
+  document
+    .getElementById("up")
+    .addEventListener("click", () => sendCommand("up"));
+  document
+    .getElementById("left")
+    .addEventListener("click", () => sendCommand("left"));
+  document
+    .getElementById("right")
+    .addEventListener("click", () => sendCommand("right"));
+  document
+    .getElementById("down")
+    .addEventListener("click", () => sendCommand("down"));
+};
 
-// const handleTouchMove = (e) => {
-//   if (socket.connected) {
-//     socket.emit(`update`, targetSocketId, {
-//       x: e.touches[0].clientX / window.innerWidth,
-//       y: e.touches[0].clientY / window.innerHeight,
-//     });
-//   }
-// };
+const sendCommand = (command) => {
+  if (socket.connected) {
+    socket.emit("update", targetSocketId, { command });
+  }
+};
 
-// init();
+init();

@@ -11,7 +11,8 @@
 </head>
 
 <body>
-  <div id="controller">
+  <div class="controller">
+    <div class="scoreDisplay">Score: 0</div>
     <button id="start">Start</button>
     <div class="row">
       <button id="up">Up</button>
@@ -26,48 +27,7 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    {
-      let socket;
-      let targetSocketId;
-
-      const init = () => {
-        targetSocketId = getUrlParameter('id');
-        if (!targetSocketId) {
-          alert(`Missing target ID in querystring`);
-          return;
-        }
-        socket = io.connect('/');
-        socket.on('connect', () => {
-          console.log(`Connected: ${socket.id}`);
-          attachButtonListeners();
-        });
-      };
-
-      const getUrlParameter = name => {
-        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-        const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-        const results = regex.exec(location.search);
-        return results === null ? false : decodeURIComponent(results[1].replace(/\+/g, ' '));
-      };
-
-      const attachButtonListeners = () => {
-        document.getElementById('start').addEventListener('click', () => sendCommand('start'));
-        document.getElementById('up').addEventListener('click', () => sendCommand('up'));
-        document.getElementById('left').addEventListener('click', () => sendCommand('left'));
-        document.getElementById('right').addEventListener('click', () => sendCommand('right'));
-        document.getElementById('down').addEventListener('click', () => sendCommand('down'));
-      };
-
-      const sendCommand = (command) => {
-        if (socket.connected) {
-          socket.emit('update', targetSocketId, { command });
-        }
-      };
-
-      init();
-    }
-  </script>
+  <script src="js/controller.js"></script>
 </body>
 
 </html>
