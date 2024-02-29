@@ -62,10 +62,9 @@ const main = () => {
       score += 10;
       document.querySelector(".score").innerHTML = `Score: ${score}`;
       socket.emit("scoreUpdate", { score: score });
-      // Directly adding a new head based on current direction
       const newHead = { x: snake[0].x + dx, y: snake[0].y + dy };
-      snake.unshift(newHead); // Add new head to the start of the snake array
-      createFood(); // Correctly placed
+      snake.unshift(newHead);
+      createFood();
     }
 
     main();
@@ -150,10 +149,9 @@ const drawFood = () => {
 const startGame = () => {
   gameHasStarted = true;
   score = 0;
-  document.querySelector(".score").innerHTML = "Score: 0"; // Initialize score display
-  createFood(); // Create initial food
-  main(); // Start the game loop
+  document.querySelector(".score").innerHTML = "Score: 0";
+  createFood();
+  main();
 };
-
 
 init();

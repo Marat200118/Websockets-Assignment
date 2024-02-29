@@ -1,5 +1,6 @@
 let socket;
 let targetSocketId;
+let gyroscope = new Gyroscope({ frequency: 5 });
 
 const init = () => {
   targetSocketId = getUrlParameter("id");
@@ -14,11 +15,27 @@ const init = () => {
   });
 
   socket.on("scoreUpdate", (data) => {
-    // Correctly access the score from the data object
     document.querySelector(
       ".scoreDisplay"
     ).textContent = `Score: ${data.score}`;
   });
+
+  gyroscope.addEventListener("reading", (e) => {
+    console.log(`Angular velocity along the X-axis ${gyroscope.x}`);
+    console.log(`Angular velocity along the Y-axis ${gyroscope.y}`);
+    console.log(`Angular velocity along the Z-axis ${gyroscope.z}`);
+
+    document.querySelector(
+      ".velocityDisplayX"
+    ).textContent = `Velocity-x: ${gyroscope.x.toFixed(2)}`;
+    document.querySelector(
+      ".velocityDisplayY"
+    ).textContent = `Velocity-y: ${gyroscope.y.toFixed(2)}`;
+    document.querySelector(
+      ".velocityDisplayZ"
+    ).textContent = `Velocity-z: ${gyroscope.z.toFixed(2)}`;
+  });
+  gyroscope.start();
 };
 
 const getUrlParameter = (name) => {

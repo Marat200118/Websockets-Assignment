@@ -1,10 +1,26 @@
 const express = require("express");
 const app = express();
-const http = require("http");
-const server = http.createServer(app);
-const { Server } = require("socket.io");
-const io = new Server(server);
-const port = process.env.PORT || 80;
+const fs = require("fs");
+// const http = require("http");
+// const server = http.createServer(app);
+// const { Server } = require("socket.io");
+// const io = new Server(server);
+// const port = process.env.PORT || 80;
+
+const options = {
+  key: fs.readFileSync("localhost.key"),
+  cert: fs.readFileSync("localhost.crt"),
+};
+
+const server = require("https").Server(options, app);
+const port = process.env.PORT || 443;
+app.use(express.static("public"));
+
+server.listen(port, () => {
+  console.log(`App listening on port ${port}!`);
+});
+
+const io = require("socket.io")(server);
 
 const clients = {};
 
@@ -28,10 +44,4 @@ io.on("connection", (socket) => {
     console.log("Score Update", data);
     io.emit("scoreUpdate", data);
   });
-});
-
-app.use(express.static("public"));
-
-server.listen(port, () => {
-  console.log(`App listening on port ${port}!`);
 });
