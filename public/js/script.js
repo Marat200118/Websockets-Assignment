@@ -32,8 +32,12 @@ const init = () => {
 
   socket.on(`update`, (data) => {
     const command = data.command;
-    if (command === "start" && !gameHasStarted) {
-      startGame();
+    if (command === "start") {
+      if (!gameHasStarted) {
+        startGame();
+      }
+    } else if (command === "reset") {
+      resetGame();
     } else {
       changeDirection(command);
     }
@@ -147,11 +151,29 @@ const drawFood = () => {
 };
 
 const startGame = () => {
-  gameHasStarted = true;
+  if (!gameHasStarted) {
+    gameHasStarted = true;
+    score = 0;
+    document.querySelector(".score").innerHTML = "Score: 0";
+    createFood();
+    main();
+  }
+};
+
+const resetGame = () => {
+  snake = [
+    { x: 150, y: 150 },
+    { x: 140, y: 150 },
+    { x: 130, y: 150 },
+    { x: 120, y: 150 },
+    { x: 110, y: 150 },
+  ];
+  dx = 10;
+  dy = 0;
   score = 0;
+  gameHasStarted = false;
   document.querySelector(".score").innerHTML = "Score: 0";
-  createFood();
-  main();
+  clearCanvas();
 };
 
 init();

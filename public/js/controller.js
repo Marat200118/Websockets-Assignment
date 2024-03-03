@@ -36,6 +36,24 @@ const init = () => {
     ).textContent = `Velocity-z: ${gyroscope.z.toFixed(2)}`;
   });
   gyroscope.start();
+
+  gyroscope.addEventListener("reading", (e) => {
+    // Threshold for detecting significant tilt
+    const threshold = 1.5; // Adjust based on testing
+
+    // Determine direction based on gyroscope data
+    if (gyroscope.x > threshold) {
+      sendCommand("down");
+    } else if (gyroscope.x < -threshold) {
+      sendCommand("up");
+    }
+
+    if (gyroscope.y > threshold) {
+      sendCommand("right");
+    } else if (gyroscope.y < -threshold) {
+      sendCommand("left");
+    }
+  });
 };
 
 const getUrlParameter = (name) => {
@@ -49,19 +67,25 @@ const getUrlParameter = (name) => {
 
 const attachButtonListeners = () => {
   document
-    .getElementById("start")
+    .querySelector(".start")
     .addEventListener("click", () => sendCommand("start"));
+
   document
-    .getElementById("up")
+    .querySelector(".reset")
+    .addEventListener("click", () => sendCommand("reset"));
+  document.querySelector(".scoreDisplay").textContent = "Score: 0";
+
+  document
+    .querySelector(".up")
     .addEventListener("click", () => sendCommand("up"));
   document
-    .getElementById("left")
+    .querySelector(".left")
     .addEventListener("click", () => sendCommand("left"));
   document
-    .getElementById("right")
+    .querySelector(".right")
     .addEventListener("click", () => sendCommand("right"));
   document
-    .getElementById("down")
+    .querySelector(".down")
     .addEventListener("click", () => sendCommand("down"));
 };
 
