@@ -25,23 +25,32 @@ const io = require("socket.io")(server);
 const clients = {};
 
 io.on("connection", (socket) => {
-  clients[socket.id] = { id: socket.id };
   console.log("Socket connected", socket.id);
+
+  clients[socket.id] = { id: socket.id, controllerConnected: false };
 
   socket.on("update", (targetSocketId, data) => {
     if (!clients[targetSocketId]) {
+      console.log("Target socket not found:", targetSocketId);
       return;
     }
-    console.log(`Command received: ${data.command}`); // Logging the command for debugging
+    console.log(`Command received: ${data.command}`);
     io.to(targetSocketId).emit("update", data);
   });
 
-  socket.on("disconnect", () => {
-    delete clients[socket.id];
+  socket.on("controllerConnected", () => {
+    console.log("Controller connected for socket:", socket.id);
+    clients[socket.id].controllerConnected = true;
+    io.emit("controllerConnected", true);
   });
 
   socket.on("scoreUpdate", (data) => {
     console.log("Score Update", data);
     io.emit("scoreUpdate", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected", socket.id);
+    delete clients[socket.id];
   });
 });

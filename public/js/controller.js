@@ -11,6 +11,8 @@ const init = () => {
   socket = io.connect("/");
   socket.on("connect", () => {
     console.log(`Connected: ${socket.id}`);
+    socket.emit("controllerConnected", true);
+    document.querySelector(".start").classList.add("animate-start");
     attachButtonListeners();
   });
 
@@ -25,15 +27,15 @@ const init = () => {
     console.log(`Angular velocity along the Y-axis ${gyroscope.y}`);
     console.log(`Angular velocity along the Z-axis ${gyroscope.z}`);
 
-    document.querySelector(
-      ".velocityDisplayX"
-    ).textContent = `Velocity-x: ${gyroscope.x.toFixed(2)}`;
-    document.querySelector(
-      ".velocityDisplayY"
-    ).textContent = `Velocity-y: ${gyroscope.y.toFixed(2)}`;
-    document.querySelector(
-      ".velocityDisplayZ"
-    ).textContent = `Velocity-z: ${gyroscope.z.toFixed(2)}`;
+    // document.querySelector(
+    //   ".velocityDisplayX"
+    // ).textContent = `Velocity-x: ${gyroscope.x.toFixed(2)}`;
+    // document.querySelector(
+    //   ".velocityDisplayY"
+    // ).textContent = `Velocity-y: ${gyroscope.y.toFixed(2)}`;
+    // document.querySelector(
+    //   ".velocityDisplayZ"
+    // ).textContent = `Velocity-z: ${gyroscope.z.toFixed(2)}`;
   });
   gyroscope.start();
 

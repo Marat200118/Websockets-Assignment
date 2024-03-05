@@ -1,7 +1,11 @@
-// const $messages = document.getElementById("messages");
 const $url = document.getElementById("url");
 const $canvas = document.getElementById("gameCanvas");
+const $gameCanvas = document.getElementById("gameCanvas");
+const $game = document.querySelector(".game");
+const $connectionInfo = document.querySelector(".connection-information");
+const $instructions = document.querySelector(".greeting-and-instructions");
 const ctx = $canvas.getContext("2d");
+
 let gameHasStarted = false;
 let socket;
 let dx = 10;
@@ -28,6 +32,8 @@ const init = () => {
     qr.addData(url);
     qr.make();
     document.getElementById("qr").innerHTML = qr.createImgTag(4);
+
+    $game.style.display = "none";
   });
 
   socket.on(`update`, (data) => {
@@ -41,6 +47,16 @@ const init = () => {
     } else {
       changeDirection(command);
     }
+  });
+
+  socket.on("controllerConnected", () => {
+    $connectionInfo.style.display = "none";
+    $game.style.display = "block";
+    $gameCanvas.style.display = "block";
+    $instructions.style.display = "none";
+    document.querySelector(".start-message").style.display = "block";
+    document.querySelector(".start-message").innerText =
+      "Press 'start' on your controller to start the game";
   });
 };
 
