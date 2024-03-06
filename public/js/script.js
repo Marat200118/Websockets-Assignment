@@ -68,15 +68,6 @@ const init = () => {
     resetGame();
   });
 
-  // socket.on("disconnect", () => {
-  //   // Reset game view to show QR code and connection info
-  //   $game.style.display = "none";
-  //   $connectionInfo.style.display = "block";
-  //   $instructions.style.display = "block";
-  //   // Optionally, reset the game state
-  //   resetGame();
-  // });
-
   socket.on("controlMethod", (data) => {
     console.log("Control method chosen:", data.method);
     // Apply control method (e.g., switch between gyroscope and button controls)

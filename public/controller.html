@@ -12,29 +12,26 @@
 
 <body>
   <div class="controller">
-
-    <div class="velocityDisplayX">Velocity-x: 0</div>
-    <div class="velocityDisplayY">Velocity-y: 0</div>
-    <div class="velocityDisplayZ">Velocity-z: 0</div>
-    <div class="scoreDisplay">Score: 0</div>
-    <div class="control-options">
-      <button class="control-option" id="useGyroscope">Use Gyroscope</button>
-      <button class="control-option" id="useButtons">Use Buttons</button>
+    <div class="control-method-choice">
+      <p>I want to control the snake with:</p>
+      <button id="useGyroscope">Gyroscope</button>
+      <button id="useButtons">Buttons</button>
     </div>
     <button class="start">Start Game</button>
-    <div class="star-and-reset">
-      <!-- <button class="start">Start</button> -->
+    <div class="game-controls" style="display:none;">
+      <div class="scoreDisplay">Score: 0</div>
       <button class="reset">Reset</button>
-    </div>
-    <div class="row">
-      <button class="up">Up</button>
-    </div>
-    <div class="row two-buttons">
-      <button class="left">Left</button>
-      <button class="right">Right</button>
-    </div>
-    <div class="row">
-      <button class="down">Down</button>
+      <div class="gyroscope-controls" style="display:none;">
+        <div>Velocity-x: <span class="velocityDisplayX">0</span></div>
+        <div>Velocity-y: <span class="velocityDisplayY">0</span></div>
+        <div>Velocity-z: <span class="velocityDisplayZ">0</span></div>
+      </div>
+      <div class="button-controls" style="display:none;">
+        <button class="up">Up</button>
+        <button class="left">Left</button>
+        <button class="right">Right</button>
+        <button class="down">Down</button>
+      </div>
     </div>
   </div>
 
