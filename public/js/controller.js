@@ -22,40 +22,37 @@ const init = () => {
     ).textContent = `Score: ${data.score}`;
   });
 
-  gyroscope.addEventListener("reading", (e) => {
-    console.log(`Angular velocity along the X-axis ${gyroscope.x}`);
-    console.log(`Angular velocity along the Y-axis ${gyroscope.y}`);
-    console.log(`Angular velocity along the Z-axis ${gyroscope.z}`);
+  // Replace gyroscope with DeviceOrientationEvent listener
+  if (window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", (event) => {
+      const { alpha, beta, gamma } = event;
 
-    // document.querySelector(
-    //   ".velocityDisplayX"
-    // ).textContent = `Velocity-x: ${gyroscope.x.toFixed(2)}`;
-    // document.querySelector(
-    //   ".velocityDisplayY"
-    // ).textContent = `Velocity-y: ${gyroscope.y.toFixed(2)}`;
-    // document.querySelector(
-    //   ".velocityDisplayZ"
-    // ).textContent = `Velocity-z: ${gyroscope.z.toFixed(2)}`;
-  });
-  gyroscope.start();
+      document.querySelector(
+        ".velocityDisplayX"
+      ).textContent = `Rotation Alpha: ${alpha.toFixed(2)}`;
+      document.querySelector(
+        ".velocityDisplayY"
+      ).textContent = `Rotation Beta: ${beta.toFixed(2)}`;
+      document.querySelector(
+        ".velocityDisplayZ"
+      ).textContent = `Rotation Gamma: ${gamma.toFixed(2)}`;
+      if (beta > 10) {
+        sendCommand("down");
+      } else if (beta < -10) {
+        sendCommand("up");
+      }
 
-  gyroscope.addEventListener("reading", (e) => {
-    // Threshold for detecting significant tilt
-    const threshold = 1.5; // Adjust based on testing
-
-    // Determine direction based on gyroscope data
-    if (gyroscope.x > threshold) {
-      sendCommand("down");
-    } else if (gyroscope.x < -threshold) {
-      sendCommand("up");
-    }
-
-    if (gyroscope.y > threshold) {
-      sendCommand("right");
-    } else if (gyroscope.y < -threshold) {
-      sendCommand("left");
-    }
-  });
+      if (gamma > 10) {
+        // Tilted right
+        sendCommand("right");
+      } else if (gamma < -10) {
+        // Tilted left
+        sendCommand("left");
+      }
+    });
+  } else {
+    console.log("DeviceOrientationEvent is not supported by this device.");
+  }
 };
 
 const getUrlParameter = (name) => {
