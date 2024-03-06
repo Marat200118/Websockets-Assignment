@@ -58,6 +58,29 @@ const init = () => {
     document.querySelector(".start-message").innerText =
       "Press 'start' on your controller to start the game";
   });
+
+  socket.on("controllerDisconnected", () => {
+    $game.style.display = "none";
+    $connectionInfo.style.display = "flex";
+    $instructions.style.display = "flex";
+    $gameCanvas.style.display = "none";
+    document.querySelector(".start-message").style.display = "none";
+    resetGame();
+  });
+
+  // socket.on("disconnect", () => {
+  //   // Reset game view to show QR code and connection info
+  //   $game.style.display = "none";
+  //   $connectionInfo.style.display = "block";
+  //   $instructions.style.display = "block";
+  //   // Optionally, reset the game state
+  //   resetGame();
+  // });
+
+  socket.on("controlMethod", (data) => {
+    console.log("Control method chosen:", data.method);
+    // Apply control method (e.g., switch between gyroscope and button controls)
+  });
 };
 
 let snake = [

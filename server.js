@@ -51,6 +51,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("Socket disconnected", socket.id);
+    io.emit("controllerDisconnected");
     delete clients[socket.id];
   });
 });

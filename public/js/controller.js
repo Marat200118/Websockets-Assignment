@@ -14,6 +14,16 @@ const init = () => {
     socket.emit("controllerConnected", true);
     document.querySelector(".start").classList.add("animate-start");
     attachButtonListeners();
+
+    document.getElementById("useGyroscope").addEventListener("click", () => {
+      socket.emit("controlMethod", { method: "gyroscope" });
+      // Optionally, handle UI changes to indicate the selection
+    });
+
+    document.getElementById("useButtons").addEventListener("click", () => {
+      socket.emit("controlMethod", { method: "buttons" });
+      // Optionally, handle UI changes to indicate the selection
+    });
   });
 
   socket.on("scoreUpdate", (data) => {
@@ -22,7 +32,6 @@ const init = () => {
     ).textContent = `Score: ${data.score}`;
   });
 
-  // Replace gyroscope with DeviceOrientationEvent listener
   if (window.DeviceOrientationEvent) {
     window.addEventListener("deviceorientation", (event) => {
       const { alpha, beta, gamma } = event;
