@@ -1,6 +1,7 @@
 let socket;
 let targetSocketId;
 let controlMethod = "";
+let gyroscope = new Gyroscope({ frequency: 5 });
 
 const init = () => {
   targetSocketId = getUrlParameter("id");
@@ -29,22 +30,16 @@ const init = () => {
     });
 
     document.querySelector(".start").addEventListener("click", () => {
+      // This could be enhanced by checking if a control method has been selected
       socket.emit("startGame", { controllerId: socket.id });
-    });
-
-    socket.on("scoreUpdate", (data) => {
-      document.querySelector(
-        ".scoreDisplay"
-      ).textContent = `Score: ${data.score}`;
     });
   });
 
   document.querySelector(".start").addEventListener("click", startGame);
-  document.querySelector(".reset").addEventListener("click", () => {
-    sendCommand("reset");
-    // Reset the score display on the controller immediately
-    document.querySelector(".scoreDisplay").textContent = `Score: 0`;
-  });
+
+  document
+    .querySelector(".reset")
+    .addEventListener("click", () => sendCommand("reset"));
 };
 
 const setupControlMethodListeners = () => {
@@ -94,16 +89,16 @@ const setupGyroscopeControlListeners = () => {
       document.querySelector(
         ".velocityDisplayZ"
       ).textContent = `Rotation Gamma: ${gamma.toFixed(2)}`;
-      if (beta > 20) {
+      if (beta > 10) {
         sendCommand("down");
-      } else if (beta < -20) {
+      } else if (beta < -10) {
         sendCommand("up");
       }
 
-      if (gamma > 20) {
+      if (gamma > 10) {
         // Tilted right
         sendCommand("right");
-      } else if (gamma < -20) {
+      } else if (gamma < -10) {
         // Tilted left
         sendCommand("left");
       }

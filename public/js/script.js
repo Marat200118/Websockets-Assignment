@@ -62,6 +62,7 @@ const init = () => {
 
   socket.on("controlMethodSelected", (data) => {
     console.log(`Control method chosen: ${data.method}`);
+    // Display a message on the screen about the chosen control method
     const message =
       data.method === "gyroscope"
         ? "Gyroscope control selected."
@@ -83,9 +84,6 @@ const init = () => {
     console.log("Control method chosen:", data.method);
     // Apply control method (e.g., switch between gyroscope and button controls)
   });
-
-  socket.on("resetGame", resetGame);
-  socket.on("startGame", startGame);
 };
 
 let snake = [
@@ -215,11 +213,8 @@ const resetGame = () => {
   dx = 10;
   dy = 0;
   score = 0;
-  // gameHasStarted = false;
+  gameHasStarted = false;
   document.querySelector(".score").innerHTML = "Score: 0";
   clearCanvas();
-  createFood();
-  drawSnake();
 };
-
 init();

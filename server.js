@@ -29,22 +29,13 @@ io.on("connection", (socket) => {
 
   clients[socket.id] = { id: socket.id, controllerConnected: false };
 
-  socket.on("update", (data) => {
-    
-    if (data.command === "reset") {
-  
-      const resetScore = 0; 
-      io.to(targetSocketId).emit("scoreUpdate", { score: resetScore });
-      io.emit("resetGame");
-    } else {
-      // Handle other commands as before
-      if (!clients[data.targetSocketId]) {
-        console.log("Target socket not found:", data.targetSocketId);
-        return;
-      }
-      console.log(`Command received: ${data.command}`);
-      io.to(data.targetSocketId).emit("update", data);
+  socket.on("update", (targetSocketId, data) => {
+    if (!clients[targetSocketId]) {
+      console.log("Target socket not found:", targetSocketId);
+      return;
     }
+    console.log(`Command received: ${data.command}`);
+    io.to(targetSocketId).emit("update", data);
   });
 
   socket.on("controllerConnected", () => {
@@ -74,6 +65,5 @@ io.on("connection", (socket) => {
 
   socket.on("startGame", (data) => {
     io.emit("startGame", data);
-    
   });
 });
