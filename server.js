@@ -29,13 +29,22 @@ io.on("connection", (socket) => {
 
   clients[socket.id] = { id: socket.id, controllerConnected: false };
 
-  socket.on("update", (targetSocketId, data) => {
-    if (!clients[targetSocketId]) {
-      console.log("Target socket not found:", targetSocketId);
-      return;
+  socket.on("update", (data) => {
+    
+    if (data.command === "reset") {
+  
+      const resetScore = 0; 
+      io.to(targetSocketId).emit("scoreUpdate", { score: resetScore });
+      io.emit("resetGame");
+    } else {
+      // Handle other commands as before
+      if (!clients[data.targetSocketId]) {
+        console.log("Target socket not found:", data.targetSocketId);
+        return;
+      }
+      console.log(`Command received: ${data.command}`);
+      io.to(data.targetSocketId).emit("update", data);
     }
-    console.log(`Command received: ${data.command}`);
-    io.to(targetSocketId).emit("update", data);
   });
 
   socket.on("controllerConnected", () => {
@@ -53,5 +62,18 @@ io.on("connection", (socket) => {
     console.log("Socket disconnected", socket.id);
     io.emit("controllerDisconnected");
     delete clients[socket.id];
+  });
+
+  socket.on("controllerConnected", (data) => {
+    io.emit("controllerConnected", data);
+  });
+
+  socket.on("controlMethodSelected", (data) => {
+    io.emit("controlMethodSelected", data);
+  });
+
+  socket.on("startGame", (data) => {
+    io.emit("startGame", data);
+    
   });
 });

@@ -53,7 +53,7 @@ body {
   height: 100%;
   color: #2C3E50;
   /* margin: 0 auto; */
-  place-items: center;
+  /* place-items: center; */
   display: flex;
   /* justify-content: center; */
   flex-direction: column; 
@@ -96,6 +96,7 @@ strong {
 }
 
 .controller {
+  width: 100%;
   background-color: #2C3E50;
   height: 100vh;
   display: flex;
@@ -106,8 +107,11 @@ strong {
   gap: 3rem;
 }
 
-.two-buttons {
+.control-method-choice {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 5rem;
 }
 
@@ -134,6 +138,34 @@ button {
   color: #fff;
   cursor: pointer;
   transition: background-color 0.25s;
+}
+
+.controlmethod {
+  color: #f1f1f1;
+  margin-bottom: 1rem;
+}
+
+.button-controls {
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.game {
+  place-items: center;
+  flex-direction: column;
+}
+
+.game-controls {
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.button-controls-horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
 }
 
 #gameCanvas {
@@ -187,4 +219,6 @@ button:hover {
 
 footer {
   margin-top: 2rem;
+  display: flex;
+  justify-content: center;
 }

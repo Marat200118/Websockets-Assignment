@@ -4,6 +4,7 @@ const $gameCanvas = document.getElementById("gameCanvas");
 const $game = document.querySelector(".game");
 const $connectionInfo = document.querySelector(".connection-information");
 const $instructions = document.querySelector(".greeting-and-instructions");
+const $controlmethod = document.querySelector(".controlmethod");
 const ctx = $canvas.getContext("2d");
 
 let gameHasStarted = false;
@@ -51,12 +52,22 @@ const init = () => {
 
   socket.on("controllerConnected", () => {
     $connectionInfo.style.display = "none";
-    $game.style.display = "block";
+    $game.style.display = "flex";
     $gameCanvas.style.display = "block";
     $instructions.style.display = "none";
     document.querySelector(".start-message").style.display = "block";
     document.querySelector(".start-message").innerText =
-      "Press 'start' on your controller to start the game";
+      "Choose your control method and press 'start' on your controller to start the game";
+  });
+
+  socket.on("controlMethodSelected", (data) => {
+    console.log(`Control method chosen: ${data.method}`);
+    const message =
+      data.method === "gyroscope"
+        ? "Gyroscope control selected."
+        : "Button control selected.";
+    $controlmethod.textContent = message;
+    $controlmethod.style.display = "block";
   });
 
   socket.on("controllerDisconnected", () => {
@@ -72,6 +83,9 @@ const init = () => {
     console.log("Control method chosen:", data.method);
     // Apply control method (e.g., switch between gyroscope and button controls)
   });
+
+  socket.on("resetGame", resetGame);
+  socket.on("startGame", startGame);
 };
 
 let snake = [
@@ -201,9 +215,11 @@ const resetGame = () => {
   dx = 10;
   dy = 0;
   score = 0;
-  gameHasStarted = false;
+  // gameHasStarted = false;
   document.querySelector(".score").innerHTML = "Score: 0";
   clearCanvas();
+  createFood();
+  drawSnake();
 };
 
 init();

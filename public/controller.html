@@ -14,8 +14,10 @@
   <div class="controller">
     <div class="control-method-choice">
       <p>I want to control the snake with:</p>
-      <button id="useGyroscope">Gyroscope</button>
-      <button id="useButtons">Buttons</button>
+      <div class="control-method-choice-buttons">
+        <button id="useGyroscope">Gyroscope</button>
+        <button id="useButtons">Buttons</button>
+      </div>
     </div>
     <button class="start">Start Game</button>
     <div class="game-controls" style="display:none;">
@@ -28,8 +30,10 @@
       </div>
       <div class="button-controls" style="display:none;">
         <button class="up">Up</button>
-        <button class="left">Left</button>
-        <button class="right">Right</button>
+        <div class="button-controls-horizontal">
+          <button class="left">Left</button>
+          <button class="right">Right</button>
+        </div>
         <button class="down">Down</button>
       </div>
     </div>
