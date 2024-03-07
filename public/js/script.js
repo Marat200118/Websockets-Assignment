@@ -15,6 +15,7 @@ let changingDirection = false;
 let foodX;
 let foodY;
 let score = 0;
+let gameLoop;
 
 const init = () => {
   socket = io.connect("/");
@@ -77,7 +78,7 @@ const init = () => {
     $instructions.style.display = "flex";
     $gameCanvas.style.display = "none";
     document.querySelector(".start-message").style.display = "none";
-    resetGame();
+    // resetGame();
   });
 
   socket.on("controlMethod", (data) => {
@@ -98,7 +99,8 @@ const main = () => {
   if (hasGameEnded()) return;
 
   changingDirection = false;
-  setTimeout(function onTick() {
+  clearTimeout(gameLoop);
+  gameLoop = setTimeout(function onTick() {
     clearCanvas();
     drawFood();
     drawSnake();
@@ -173,6 +175,12 @@ const hasGameEnded = () => {
   const hitToptWall = snake[0].y < 0;
   const hitBottomWall = snake[0].y > $canvas.height - 10;
 
+  if (hitLeftWall || hitRightWall || hitToptWall || hitBottomWall) {
+    socket.emit("scoreUpdate", { score });
+    console.log("Game over");
+    return true;
+  }
+
   return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall;
 };
 
@@ -203,6 +211,8 @@ const startGame = () => {
 };
 
 const resetGame = () => {
+  console.log("Resetting game");
+  clearTimeout(gameLoop); // Ensure any existing game loop is cleared
   snake = [
     { x: 150, y: 150 },
     { x: 140, y: 150 },
@@ -213,8 +223,12 @@ const resetGame = () => {
   dx = 10;
   dy = 0;
   score = 0;
-  gameHasStarted = false;
+  gameHasStarted = true; // Ensure game state is set to start
   document.querySelector(".score").innerHTML = "Score: 0";
   clearCanvas();
+  createFood();
+  drawSnake(); // Ensure the initial state of the snake is drawn
+  main(); // Start the game loop
 };
+
 init();

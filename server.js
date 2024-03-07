@@ -66,4 +66,8 @@ io.on("connection", (socket) => {
   socket.on("startGame", (data) => {
     io.emit("startGame", data);
   });
+
+  socket.on("resetGame", (data) => {
+    io.emit("resetGame", data);
+  });
 });
