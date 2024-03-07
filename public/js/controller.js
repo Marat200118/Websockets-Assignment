@@ -83,16 +83,28 @@ const setupGyroscopeControlListeners = () => {
   if (window.DeviceOrientationEvent) {
     window.addEventListener("deviceorientation", (event) => {
       const { alpha, beta, gamma } = event;
+      const $ball = document.querySelector(".ball");
 
-      document.querySelector(
-        ".velocityDisplayX"
-      ).textContent = `Rotation Alpha: ${alpha.toFixed(2)}`;
-      document.querySelector(
-        ".velocityDisplayY"
-      ).textContent = `Rotation Beta: ${beta.toFixed(2)}`;
-      document.querySelector(
-        ".velocityDisplayZ"
-      ).textContent = `Rotation Gamma: ${gamma.toFixed(2)}`;
+      let topPosition = 40 + beta * 0.7;
+      let leftPosition = 40 + gamma * 0.7;
+
+      // Clamp values to container bounds
+      topPosition = Math.max(0, Math.min(200, topPosition));
+      leftPosition = Math.max(0, Math.min(200, leftPosition));
+
+      // Update ball position
+      $ball.style.top = `${topPosition}%`;
+      $ball.style.left = `${leftPosition}%`;
+
+      // document.querySelector(
+      //   ".velocityDisplayX"
+      // ).textContent = `Rotation Alpha: ${alpha.toFixed(2)}`;
+      // document.querySelector(
+      //   ".velocityDisplayY"
+      // ).textContent = `Rotation Beta: ${beta.toFixed(2)}`;
+      // document.querySelector(
+      //   ".velocityDisplayZ"
+      // ).textContent = `Rotation Gamma: ${gamma.toFixed(2)}`;
       if (beta > 20) {
         sendCommand("down");
       } else if (beta < -20) {
