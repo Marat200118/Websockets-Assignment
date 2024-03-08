@@ -31,7 +31,6 @@ These instructions will get you a copy of the project up and running on your loc
 Before you begin, ensure you have the following installed:
 - [Node.js](https://nodejs.org/en/) (version 12.x or later recommended)
 - [npm](https://www.npmjs.com/) (normally comes with Node.js)
-<img width="594" alt="Screenshot 2024-03-08 at 16 56 39" src="https://github.com/Marat200118/Websockets-Assignment/assets/37581663/f9ad6caf-d84f-47d0-841d-4bac486b01ae">
 
 ### Installation
 
