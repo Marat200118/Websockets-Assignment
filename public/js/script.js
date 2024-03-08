@@ -63,7 +63,6 @@ const init = () => {
 
   socket.on("controlMethodSelected", (data) => {
     console.log(`Control method chosen: ${data.method}`);
-    // Display a message on the screen about the chosen control method
     const message =
       data.method === "gyroscope"
         ? "Gyroscope control selected."
@@ -78,12 +77,10 @@ const init = () => {
     $instructions.style.display = "flex";
     $gameCanvas.style.display = "none";
     document.querySelector(".start-message").style.display = "none";
-    // resetGame();
   });
 
   socket.on("controlMethod", (data) => {
     console.log("Control method chosen:", data.method);
-    // Apply control method (e.g., switch between gyroscope and button controls)
   });
 };
 
@@ -119,7 +116,6 @@ const main = () => {
   }, 150);
 };
 
-// Draw a border around the canvas
 const clearCanvas = () => {
   ctx.fillStyle = "black";
   ctx.strokestyle = "white";
@@ -127,7 +123,6 @@ const clearCanvas = () => {
   ctx.strokeRect(0, 0, $canvas.width, $canvas.height);
 };
 
-// Draw the snake on the canvas
 const drawSnake = () => {
   snake.forEach((part) => {
     ctx.fillStyle = "lightgreen";
@@ -137,14 +132,12 @@ const drawSnake = () => {
   });
 };
 
-// Move the snake
 const moveSnake = () => {
   const head = { x: snake[0].x + dx, y: snake[0].y + dy };
   snake.unshift(head);
   snake.pop();
 };
 
-// Change snake direction
 const changeDirection = (command) => {
   if (changingDirection) return;
   changingDirection = true;
@@ -164,7 +157,6 @@ const changeDirection = (command) => {
   }
 };
 
-// Check collision with self
 const hasGameEnded = () => {
   for (let i = 4; i < snake.length; i++) {
     const collided = snake[i].x === snake[0].x && snake[i].y === snake[0].y;
@@ -212,7 +204,7 @@ const startGame = () => {
 
 const resetGame = () => {
   console.log("Resetting game");
-  clearTimeout(gameLoop); // Ensure any existing game loop is cleared
+  clearTimeout(gameLoop);
   snake = [
     { x: 150, y: 150 },
     { x: 140, y: 150 },
@@ -223,12 +215,12 @@ const resetGame = () => {
   dx = 10;
   dy = 0;
   score = 0;
-  gameHasStarted = true; // Ensure game state is set to start
+  gameHasStarted = true;
   document.querySelector(".score").innerHTML = "Score: 0";
   clearCanvas();
   createFood();
-  drawSnake(); // Ensure the initial state of the snake is drawn
-  main(); // Start the game loop
+  drawSnake();
+  main();
 };
 
 init();
