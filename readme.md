@@ -12,10 +12,14 @@ User is able to control the snake in the game using either gyroscope controls or
 - Responsive design for both desktop and mobile devices.
 
 ## Interface
+
+### Snake game
 <img width="1463" alt="Screenshot 2024-03-08 at 16 56 48" src="https://github.com/Marat200118/Websockets-Assignment/assets/37581663/5cfb38db-65e4-4882-bb13-fa34443e8517">
-<img width="594" alt="Screenshot 2024-03-08 at 16 56 39" src="https://github.com/Marat200118/Websockets-Assignment/assets/37581663/e4c85685-dfe8-49dd-9f1a-9bd9fa1ada1c">
-<img width="598" alt="Screenshot 2024-03-08 at 16 56 11" src="https://github.com/Marat200118/Websockets-Assignment/assets/37581663/67488cbb-1281-4ad3-9ba2-b03f2408992d">
-<img width="596" alt="Screenshot 2024-03-08 at 16 56 01" src="https://github.com/Marat200118/Websockets-Assignment/assets/37581663/6794c028-0eee-4cf1-b613-a3b93a2d1389">
+
+### Controller
+<img width="300" alt="Screenshot 2024-03-08 at 16 56 39" src="https://github.com/Marat200118/Websockets-Assignment/assets/37581663/e4c85685-dfe8-49dd-9f1a-9bd9fa1ada1c">
+<img width="300" alt="Screenshot 2024-03-08 at 16 56 11" src="https://github.com/Marat200118/Websockets-Assignment/assets/37581663/67488cbb-1281-4ad3-9ba2-b03f2408992d">
+<img width="300" alt="Screenshot 2024-03-08 at 16 56 01" src="https://github.com/Marat200118/Websockets-Assignment/assets/37581663/6794c028-0eee-4cf1-b613-a3b93a2d1389">
 
 
 ## Getting Started
